@@ -44,9 +44,9 @@ public class NasaController {
     @GetMapping("/bydate/{date}")
     ResponseEntity<?> apodByDatePathVariable (RestTemplate restTemplate, @PathVariable String date) {
         String key = env.getProperty("APOD_KEY");
-//        if (key == null){
-//            return ResponseEntity.internalServerError().body("Api key is not present");
-//        }
+        if (key == null){
+            return ResponseEntity.internalServerError().body("Api key is not present");
+        }
         String url = "https://api.nasa.gov/planetary/apod?api_key=" + key + "&date=" + date;
         String response = restTemplate.getForObject(url, String.class);
         return ResponseEntity.ok(response);
