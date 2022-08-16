@@ -1,5 +1,6 @@
 package com.careerdevs.NASAapod.controllers;
 
+import com.careerdevs.NASAapod.models.NasaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -20,41 +21,59 @@ public class NasaController {
     private Environment env;
 
 
-
 //These fields are made final therefore they're immutable (unable to be changed).
 
-    @GetMapping("/apod")
-    public Object apodHandler (RestTemplate restTemplate){
+//    @GetMapping("/apod")
+//    public Object apodHandler (RestTemplate restTemplate){
+//
+//        String key = env.getProperty("APOD_KEY", "DEMO_KEY");
+//        final String nasaApodEndpoint = "https://api.nasa.gov/planetary/apod?api_key=" + key;
+//        return restTemplate.getForObject(nasaApodEndpoint, Object.class);
+//    }
+//
+//
+//
+//    @GetMapping ("/today")
+//    ResponseEntity<?> apodToday (RestTemplate restTemplate){
+//        String key = env.getProperty("APOD_KEY", "DEMO_KEY");
+//        final String url = "https://api.nasa.gov/planetary/apod?api_key=" + key;
+//        Object response = restTemplate.getForObject(url, Object.class);
+//        return ResponseEntity.ok(response);
+//    }
+//
+//    @GetMapping("/bydate/{date}")
+//    ResponseEntity<?> apodByDatePathVariable (RestTemplate restTemplate, @PathVariable String date) {
+//        String key = env.getProperty("APOD_KEY");
+//        if (key == null){
+//            return ResponseEntity.internalServerError().body("Api key is not present");
+//        }
+//        String url = "https://api.nasa.gov/planetary/apod?api_key=" + key + "&date=" + date;
+//        Object response = restTemplate.getForObject(url, Object.class);
+//        return ResponseEntity.ok(response);
+//
+//    }
 
+
+    @GetMapping("/today")
+    ResponseEntity<?> apodToday(RestTemplate restTemplate) {
         String key = env.getProperty("APOD_KEY", "DEMO_KEY");
-        final String nasaApodEndpoint = "https://api.nasa.gov/planetary/apod?api_key=" + key;
-        return restTemplate.getForObject(nasaApodEndpoint, Object.class);
-    }
-
-
-
-    @GetMapping ("/today")
-    ResponseEntity<?> apodToday (RestTemplate restTemplate){
-      String key = env.getProperty("APOD_KEY", "DEMO_KEY");
         final String url = "https://api.nasa.gov/planetary/apod?api_key=" + key;
-        String response =restTemplate.getForObject(url, String.class);
+        NasaModel response = restTemplate.getForObject(url, NasaModel.class);
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/bydate/{date}")
-    ResponseEntity<?> apodByDatePathVariable (RestTemplate restTemplate, @PathVariable String date) {
+    ResponseEntity<?> apodByDatePathVariable(RestTemplate restTemplate, @PathVariable String date) {
         String key = env.getProperty("APOD_KEY");
-        if (key == null){
+        if (key == null) {
             return ResponseEntity.internalServerError().body("Api key is not present");
         }
         String url = "https://api.nasa.gov/planetary/apod?api_key=" + key + "&date=" + date;
-        String response = restTemplate.getForObject(url, String.class);
+        NasaModel response = restTemplate.getForObject(url, NasaModel.class);
         return ResponseEntity.ok(response);
 
     }
-
-
-
 }
 
 
