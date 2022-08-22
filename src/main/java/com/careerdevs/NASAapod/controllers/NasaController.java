@@ -2,6 +2,7 @@ package com.careerdevs.NASAapod.controllers;
 
 import com.careerdevs.NASAapod.models.NasaModel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,17 @@ import java.time.format.DateTimeFormatter;
 public class NasaController {
     @Autowired
     private Environment env;
+
+    @Value("${APOD_KEY}")
+    private String apiKey;
+
     private String urlBase = "https://api.nasa.gov/planetary/apod?api_key=";
+    @GetMapping("/testKey")
+    private String getApiKey(){
+        return urlBase;
+    }
+
+
 
 
 //These fields are made final therefore they're immutable (unable to be changed).
@@ -62,8 +73,8 @@ public class NasaController {
     @GetMapping("/today")
     ResponseEntity<?> apodToday(RestTemplate restTemplate) {
         try {
-            String key = env.getProperty("APOD_KEY", "DEMO_KEY");
-            final String url = urlBase + key;
+           // String key = env.getProperty("APOD_KEY", "DEMO_KEY");
+            final String url = urlBase + apiKey;
             NasaModel response = restTemplate.getForObject(url, NasaModel.class);
             return ResponseEntity.ok(response);
 
